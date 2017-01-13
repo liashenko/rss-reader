@@ -1,0 +1,72 @@
+<!-- views/pages/index.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="/stylesheets/style.css"> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
+<script src="/js/feed.js"></script>  
+</head>
+<body class="container">
+
+    <header>
+    </header>
+
+    <main>
+    <div id="container4">
+    <div id="container3">
+        <div id="container2">
+            <div id="container1">
+                <div id="col1">
+                    <ul id="channels-list">                        
+                        <%for (var url in urls){%>
+                            <li class="channel">
+                                <a href='/channel/<%=url%>'>
+                                    <%=urls[url]%>
+                                </a></br>
+                                <a href='/channel/delete/<%=url%>'>Del</a>
+                            </li>    
+                        <%}%>
+                    </ul>
+                    <form id="addchannel" action="/channel/add">                        
+                        <input type="text" name="newchannel"><br>
+                        <input type="submit" value="Add">
+                    </form>
+                </div>
+                <div id="col2">
+                    <ul id="feed-list"> 
+                        <%if (locals.content){%>
+                        <%for (var msg in content){%>
+                            <li class="msg"+<%=content[msg].id%> 
+                            onclick="showMsg(<%=JSON.stringify(content[msg].content)%>)">
+                                <%=content[msg].title%>
+                            </li>    
+                        <%}%>  
+                        <%}%>
+                    </ul>
+                </div>
+                <div id="col3">
+                    <p></p>
+                </div>
+                <div id="col4">
+                    <p></p>
+                    <%if (locals.content){%>
+                    <p>Число каналов: <%=urls.length%></p>
+                    <p>Число сообщений: <%=content.length%></p>
+                    <p>Число авторов: <%=authorsCount%></p>
+                    <div id="msg-statistics">                    
+                        <p>Статистика сообщения:</p>
+                        <canvas id='chart-statistics'></canvas>
+                    </div>
+                    <%}%>
+                </div>
+            </div>
+        </div>
+    </div>    
+    </main>
+
+    <footer>
+    </footer>
+    
+</body>
+</html>
