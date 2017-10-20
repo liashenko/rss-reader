@@ -1,23 +1,23 @@
 function showMsg(msg){
-	var col = document.getElementById('col3');
-	var div = document.createElement('div');
+	const div = document.createElement('div');
 	div.innerHTML = "<p></p>" + msg;
+	const col = document.getElementById('col3');
 	clearDiv(col);
 	col.appendChild(div);
 	document.getElementById('msg-statistics').style="display:block";
-	var letters = getLetters(msg).toLowerCase();
+	const letters = msg.replace(/[^A-Z]/gi, "").toLowerCase();
 	createChart(letters);
 }
 
-function createChart(msg){
-	var ctx = document.getElementById("chart-statistics").getContext('2d');
+function createChart(letters){
+	let ctx = document.getElementById("chart-statistics").getContext('2d');
 	ctx.canvas.width = 300;
 	ctx.canvas.height = 500;
 
-	//fill dictionary, key:letter, value: number of letter in msg
-	var dict = getLettersStatistics(msg, msg.length);
+	//key : letter, value : frequency of letter to total number of letters
+	const dict = getLettersStatistics(letters, letters.length);
 
-	var myChart = new Chart(ctx, {
+	const myChart = new Chart(ctx, {
 	  type: 'pie',
 	  data: {
 	    labels: Object.keys(dict),
@@ -29,25 +29,15 @@ function createChart(msg){
 	});
 }
 
-function getLettersStatistics(str, num){
-	var map = {};
-	//count letters in message
-	for(i in str){
-		if(map[str[i]]==undefined)
-			map[str[i]] = 1;
-		else{
-			++map[str[i]];
-		}
+function getLettersStatistics(text, charsNumber){
+	let frequency = {};
+	text.split('').forEach(function(s) {
+	   frequency[s] ? frequency[s]++ : frequency[s] = 1;
+	});	
+	for (key in frequency){
+		frequency[key] = (frequency[key] / charsNumber);
 	}
-	//number of letter to number of letters
-	for (m in map){
-		map[m] = (map[m] / num);
-	}
-	return map;
-}
-
-function getLetters(str){
-	return str.replace(/[^A-Z]/gi, "");
+	return frequency;
 }
 
 //clear html element
@@ -58,7 +48,7 @@ function clearDiv(content){
 }
 
 //array of background colors for Chart
-backgroundColors = [
+const backgroundColors = [
     "#2ecc71",
     "#3498db",
     "#95a5a6",
